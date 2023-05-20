@@ -1,0 +1,23 @@
+.proposalsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.proposalsTable th {
+  padding: 8px;
+  text-align: center;
+}
+
+.proposalsTable td {
+  padding: 8px;
+  text-align: center;
+}
+
+.leftAlign {
+  text-align: left;
+}
+
+.centerAlign {
+  text-align: center;
+}
