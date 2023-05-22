@@ -8,6 +8,9 @@ import BalanceComponent from '../components/BalanceComponent'
 import { useContext } from 'react'
 import { AddressContext } from '../components/context/AddressContext'
 import ProposalComponent from './ProposalsComponent'
+import DelegateTokensForm from './DelegateTokensForm'
+import VoteProposalComponent from './VoteProposalComponent'
+import VotingPowerComponent from './VotingPowerComponent'
 
 export default function InstructionsComponent() {
   const [signer, setSigner] = useState(null)
@@ -56,9 +59,12 @@ export default function InstructionsComponent() {
           <WalletBalance></WalletBalance>
           <TokenRequestForm setAddress={setAddress} address={address} />
           <BalanceComponent address={address} />
-          <VotesComponent address={address} />
+          <VotingPowerComponent />
+          {/* <VotesComponent address={address} /> */}
           {/* <DelegateComponent /> */}
           <ProposalComponent />
+          <DelegateTokensForm />
+          <VoteProposalComponent />
         </>
       )
     else if (isLoading)

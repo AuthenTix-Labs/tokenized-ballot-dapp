@@ -1,0 +1,17 @@
+.inputField {
+  width: 50%;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+  border-color: dodgerblue;
+  margin: 0.3rem;
+}
+
+.buttonField {
+  border-radius: 0.25rem;
+  background-color: dodgerblue;
+  padding: 0.3rem;
+  font-size: small;
+  box-shadow: aliceblue;
+  border-color: none;
+  margin: 0.3rem;
+}

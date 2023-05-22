@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ethers } from 'ethers'
 import { useSigner } from 'wagmi'
+import styles from '../styles/InstructionsComponent.module.css'
 
 const VotesComponent = () => {
   const [votes, setVotes] = useState('')
@@ -39,9 +40,15 @@ const VotesComponent = () => {
   return (
     <div>
       Votes: {votes}
-      <button onClick={handleQuery} disabled={isLoading}>
-        {isLoading ? 'Loading...' : 'Query Votes'}
-      </button>
+      <div>
+        <button
+          className={styles.buttonField}
+          onClick={handleQuery}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Loading...' : 'Query Votes'}
+        </button>
+      </div>
     </div>
   )
 }

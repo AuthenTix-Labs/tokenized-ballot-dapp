@@ -3,7 +3,6 @@ import { ethers } from 'ethers';
 import * as tokenJson from './assets/MyERC20Token.json';
 import * as ballotJson from './assets/TokenizedBallot.json';
 import { ConfigService } from '@nestjs/config';
-import { Request } from 'express';
 
 @Injectable()
 export class AppService {
@@ -27,37 +26,23 @@ export class AppService {
     );
   }
 
-  getHello(): string {
-    return 'Hello World!';
-  }
-
-  getLastBlock() {
-    return this.provider.getBlock('latest');
-  }
-
+  // get contract-address
   getAddress(configKey: string): string {
     const contractAddress = this.configService.get<string>(configKey);
     return contractAddress;
   }
 
-  getTotalSupply() {
-    return this.contract.totalSupply();
-  }
-
+  // get token balance of an address
   getBalanceOf(address: string) {
     return this.contract.balanceOf(address);
   }
 
-  async getTransactionReceipt(hash: string) {
-    const tx = await this.provider.getTransaction(hash);
-    const receipt = await this.getReceipt(tx);
-    return receipt;
+  // get voting-power of an address after delegation
+  getVotingPower(address: string) {
+    return this.tokenizedContract.votingPower(address);
   }
 
-  async getReceipt(tx: ethers.providers.TransactionResponse) {
-    return await tx.wait();
-  }
-
+  // address with minter-role can request/mint tokens
   async requestTokens(address: string) {
     const pKey = this.configService.get<string>('PRIVATE_KEY');
     const wallet = new ethers.Wallet(pKey);
@@ -67,26 +52,7 @@ export class AppService {
       .mint(address, ethers.utils.parseUnits('100'));
   }
 
-  private async getInjectedSigner(request: Request): Promise<ethers.Signer> {
-    const provider = new ethers.providers.JsonRpcProvider(
-      this.configService.get<string>('SEPOLIA_RPC_URL'),
-    );
-    const ethEnabled = (window as any).ethereum;
-
-    if (ethEnabled) {
-      await ethEnabled.request({ method: 'eth_requestAccounts' });
-      const signer = provider.getSigner();
-      return signer;
-    } else {
-      throw new Error('Please install MetaMask to use this feature');
-    }
-  }
-
-  // async delegateTokens(address: string, request: Request) {
-  //   const signer = await this.getInjectedSigner(request);
-  //   return this.contract.connect(signer).delegate(address);
-  // }
-
+  // get current votes for an address
   async getVotes(address: string) {
     const pKey = this.configService.get<string>('PRIVATE_KEY');
     const wallet = new ethers.Wallet(pKey);
@@ -101,6 +67,7 @@ export class AppService {
     return this.tokenizedContract.connect(signer).balanceOf(address);
   }
 
+  // Get-proposal by index number
   async getProposals(proposal: number) {
     const response = await this.tokenizedContract.proposals(proposal);
     const name = response[0];
@@ -109,10 +76,40 @@ export class AppService {
     return { name, voteCount };
   }
 
-  async vote(proposal: number, amount: string, request: Request) {
-    const signer = await this.getInjectedSigner(request);
-    return this.tokenizedContract
-      .connect(signer)
-      .vote(proposal, ethers.utils.parseEther(amount));
+  // Extra routes from the Week 4 lecture
+  getHello(): string {
+    return 'Hello World!';
   }
+
+  getLastBlock() {
+    return this.provider.getBlock('latest');
+  }
+
+  getTotalSupply() {
+    return this.contract.totalSupply();
+  }
+
+  async getTransactionReceipt(hash: string) {
+    const tx = await this.provider.getTransaction(hash);
+    const receipt = await this.getReceipt(tx);
+    return receipt;
+  }
+
+  async getReceipt(tx: ethers.providers.TransactionResponse) {
+    return await tx.wait();
+  }
+
+  // The delegate and vote functions are handled in the frontend.
+
+  // async delegateTokens(signedTx: string) {
+  //   const tx = await this.provider.sendTransaction(signedTx);
+  //   return tx;
+  // }
+
+  // async vote(proposal: number, amount: string, request: Request) {
+  //   const signer = await this.getInjectedSigner(request);
+  //   return this.tokenizedContract
+  //     .connect(signer)
+  //     .vote(proposal, ethers.utils.parseEther(amount));
+  // }
 }

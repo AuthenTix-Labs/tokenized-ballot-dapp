@@ -3,12 +3,12 @@ import axios from 'axios'
 import { ethers } from 'ethers'
 import { useSigner } from 'wagmi'
 
-const BalanceComponent = () => {
+const VotingPowerComponent = () => {
   const [balance, setBalance] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { data: signer } = useSigner() // <-- Get signer's address
 
-  const fetchBalance = async () => {
+  const votingPower = async () => {
     try {
       if (!signer) {
         setBalance('')
@@ -16,7 +16,7 @@ const BalanceComponent = () => {
       }
       setIsLoading(true) // Set loading state to true
       const response = await axios.get(
-        `http://localhost:3001/balance/${signer._address}`
+        `http://localhost:3001/voting-power/${signer._address}`
       ) // <-- Use signer's address
       const balanceValue = ethers.BigNumber.from(response.data.hex)
       const formattedBalance = ethers.utils.formatEther(balanceValue)
@@ -29,16 +29,16 @@ const BalanceComponent = () => {
   }
 
   useEffect(() => {
-    fetchBalance() // Fetch initial balance
+    votingPower() // Fetch initial balance
   }, [signer]) // <-- Update balance when signer changes
 
   const handleQuery = () => {
-    fetchBalance() // Fetch balance on demand
+    votingPower() // Fetch balance on demand
   }
 
   return (
     <div>
-      Balance: {balance}
+      Voting Power: {balance}
       <div>
         <button onClick={handleQuery} disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Query Balance'}
@@ -48,4 +48,4 @@ const BalanceComponent = () => {
   )
 }
 
-export default BalanceComponent
+export default VotingPowerComponent

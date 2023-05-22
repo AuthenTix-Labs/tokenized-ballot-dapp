@@ -2,5 +2,5 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class DelegateTokensDto {
   @ApiProperty()
-  readonly address: string;
+  readonly signedTx: string;
 }

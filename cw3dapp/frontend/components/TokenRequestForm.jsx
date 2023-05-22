@@ -48,7 +48,7 @@ const TokenRequestForm = () => {
         <br />
         <br />
 
-        <button type="submit" disabled={loading}>
+        <button className={styles.buttonField} type="submit" disabled={loading}>
           {loading ? 'Minting...' : 'Request Tokens'}
         </button>
       </form>

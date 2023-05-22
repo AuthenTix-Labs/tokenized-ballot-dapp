@@ -70,26 +70,30 @@ const ProposalComponent = () => {
   return (
     <div>
       <h1>Proposals</h1>
-      <table className={styles.proposalsTable}>
+      <table className={styles.styledTable}>
         <thead>
           <tr>
-            <th className={styles.leftAlign}>Index</th>
-            <th className={styles.centerAlign}>Name</th>
-            <th className={styles.centerAlign}>Votes</th>
+            <th>Index</th>
+            <th>Name</th>
+            <th>Votes</th>
           </tr>
         </thead>
         <tbody>
           {proposals.map((proposal, index) => (
             <tr key={index}>
-              <td className={styles.leftAlign}>{index}</td>
-              <td className={styles.centerAlign}>{proposal.name}</td>
-              <td className={styles.centerAlign}>{proposal.voteCount}</td>
+              <td>{index}</td>
+              <td>{proposal.name}</td>
+              <td>{proposal.voteCount}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <button onClick={handleQueryVotes} disabled={querying}>
+      <button
+        className={styles.buttonField}
+        onClick={handleQueryVotes}
+        disabled={querying}
+      >
         Query Votes
       </button>
       <br />
